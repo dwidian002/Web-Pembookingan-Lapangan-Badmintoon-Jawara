@@ -34,14 +34,14 @@
                          @php
                          $no = 1;
                          @endphp
-                         @foreach($galeri as $galeri)
+                         @foreach($galeri as $row)
                              <tr>
                                  <td>{{$no++}}</td>
-                                 <td>{{$galeri->judul_foto}}</td>
-                                 <td><img src="{{route('storage',$galeri->foto_galeri)}}" width="200px" height="200px"></td>
+                                 <td>{{$row->judul_foto}}</td>
+                                 <td><img src="{{route('storage',$row->foto_galeri)}}" width="200px" height="200px"></td>
                                  <td>
-                                     <a href="{{route('galeri.edit',$galeri->id_foto)}}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Ubah</a>
-                                     <a href="{{route('galeri.hapus',$galeri->id_foto)}}" onclick="return confirm('Anda Yakin ?')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                     <a href="{{route('galeri.edit',$row->id_foto)}}" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Ubah</a>
+                                     <a href="{{route('galeri.hapus',$row->id_foto)}}" onclick="return confirm('Anda Yakin ?')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Hapus</a>
                                  </td>
                              </tr>
                          @endforeach

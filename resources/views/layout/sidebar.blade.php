@@ -29,6 +29,27 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('pelanggan.list')}}" class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Pelanggan</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('spadmin.list')}}" class="nav-link">
+                        <i class="nav-icon fas fa-user-circle"></i>
+                        <p>Admin</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('user.list')}}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Users</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('lapangan.list') }}" class="nav-link">
                         <i class="nav-icon fas fa-columns"></i>
                         <p>Lapangan</p>

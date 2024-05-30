@@ -7,21 +7,24 @@ use Illuminate\Http\Request;
 
 class GaleriController extends Controller
 {
-    public function list(){
+    public function list()
+    {
         $galeri = Galeri::all();
-        return view("backend.content.galeri.list",[
+        return view("backend.content.galeri.list", [
             'galeri' => $galeri
         ]);
     }
 
-    public function tambah() {
+    public function tambah()
+    {
         $galeri = Galeri::all();
-        return view("backend.content.galeri.tambah",[
+        return view("backend.content.galeri.tambah", [
             'galeri' => $galeri
         ]);
     }
 
-    public function prosesTambah(Request $request){
+    public function prosesTambah(Request $request)
+    {
         $this->validate($request, [
             'judul_foto' => 'required',
             'foto_galeri' => 'required',
@@ -42,38 +45,40 @@ class GaleriController extends Controller
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $galeri = Galeri::findOrFail($id);
-        return view('backend.content.galeri.edit',[
+        return view('backend.content.galeri.edit', [
             'galeri' => $galeri
         ]);
     }
 
     public function prosesEdit(Request $request)
-{
-    $this->validate($request, [
-        'judul_foto' => 'required',
-    ]);
+    {
+        $this->validate($request, [
+            'judul_foto' => 'required',
+        ]);
 
-    $galeri = Galeri::findOrFail($request->id_foto);
-    $galeri->judul_foto = $request->judul_foto;
+        $galeri = Galeri::findOrFail($request->id_foto);
+        $galeri->judul_foto = $request->judul_foto;
 
-    if ($request->hasFile('foto_galeri')) {
-        $request->file('foto_galeri')->store('public');
-        $foto_galeri = $request->file('foto_galeri')->hashName();
-        $galeri->foto_galeri = $foto_galeri;
+        if ($request->hasFile('foto_galeri')) {
+            $request->file('foto_galeri')->store('public');
+            $foto_galeri = $request->file('foto_galeri')->hashName();
+            $galeri->foto_galeri = $foto_galeri;
+        }
+
+        try {
+            $galeri->save();
+            return redirect(route('galeri.list'))->with('pesan', ['success', 'Berhasil Ubah galeri']);
+        } catch (\Exception $e) {
+            return redirect(route('galeri.list'))->with('pesan', ['danger', 'Gagal Ubah galeri']);
+        }
     }
 
-    try {
-        $galeri->save();
-        return redirect(route('galeri.list'))->with('pesan', ['success', 'Berhasil Ubah galeri']);
-    } catch (\Exception $e) {
-        return redirect(route('galeri.list'))->with('pesan', ['danger', 'Gagal Ubah galeri']);
-    }
-}
 
-
-    public function hapus($id) {
+    public function hapus($id)
+    {
         $galeri = Galeri::findOrFail($id);
 
         try {

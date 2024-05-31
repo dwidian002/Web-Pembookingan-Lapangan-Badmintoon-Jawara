@@ -22,8 +22,8 @@ class BookingController extends Controller
             $lapangan = Lapangan::all();
             $session = Session::all();
 
-            foreach ($lapangan as $l){
-                foreach ($session as $s){
+            foreach ($lapangan as $l) {
+                foreach ($session as $s) {
                     $bs = new BookingSession();
                     $bs->date = $request->date;
                     $bs->id_lap = $l->id_lapangan;
@@ -34,11 +34,9 @@ class BookingController extends Controller
             }
 
             return redirect()->route('booking.tambah')->with('pesan', ['success', 'Berhasil generate']);
-        }else{
+        } else {
             return redirect()->route('booking.tambah')->with('pesan', ['danger', 'Telah di generate']);
         }
-
-
     }
 
     public function list()
@@ -49,9 +47,11 @@ class BookingController extends Controller
 
     public function detail($date)
     {
-        $bs = BookingSession::with(['session','lapangan','user'])->where('date','=',$date)->get();
-        return view('backend.content.booking.detail', compact('bs','date'));
+        $bs = BookingSession::with(['session', 'lapangan', 'user'])->where('date', '=', $date)->get();
+        return view('backend.content.booking.detail', compact('bs', 'date'));
     }
+
+
 
     public function tambah()
     {
@@ -62,9 +62,9 @@ class BookingController extends Controller
 
     public function tambahbook($date)
     {
-        $customer = User::where('role','=','pelanggan')->get();
-        $bs = BookingSession::with(['session','lapangan'])->where('date','=',$date)->get();
-        return view('backend.content.booking.tambahbook', compact('customer','date','bs'));
+        $customer = User::where('role', '=', 'pelanggan')->get();
+        $bs = BookingSession::with(['session', 'lapangan'])->where('date', '=', $date)->get();
+        return view('backend.content.booking.tambahbook', compact('customer', 'date', 'bs'));
     }
 
     public function prosestambahbook(Request $request)
@@ -73,14 +73,14 @@ class BookingController extends Controller
         $date = $request->date;
         $idbs = $request->idbs;
 
-        foreach ($idbs as $row){
+        foreach ($idbs as $row) {
             $bs = BookingSession::findOrFail($row);
             $bs->id_customer = $id_customer;
             $bs->status = 1;
             $bs->save();
         }
 
-        return redirect()->route('booking.detail',$date)->with('pesan', ['success', 'Berhasil menambah data booking']);
+        return redirect()->route('booking.detail', $date)->with('pesan', ['success', 'Berhasil menambah data booking']);
     }
 
     public function batalkan($idbs)
@@ -88,32 +88,33 @@ class BookingController extends Controller
         $bs = BookingSession::findOrFail($idbs);
         $bs->id_customer = null;
         $bs->status = 0;
+        $bs->status_bayar = 0;
         $bs->save();
-        return redirect()->route('booking.detail',$bs->date)->with('pesan', ['success', 'Berhasil batalkan data booking']);
+        return redirect()->route('booking.detail', $bs->date)->with('pesan', ['success', 'Berhasil batalkan data booking']);
     }
 
-//    public function tambah()
-//    {
-////        $pelanggans = Pelanggan::all();
-//        $lapangans = Lapangan::all();
-//        $Id_pel = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
-//        $jamBooking = [
-//            '07.00-08.00 WIB', '08.00-09.00 WIB', '09.00-10.00 WIB', '10.00-11.00 WIB',
-//            '11.00-12.00 WIB', '12.00-13.00 WIB', '13.00-14.00 WIB', '14.00-15.00 WIB',
-//            '15.00-16.00 WIB', '16.00-17.00 WIB', '17.00-18.00 WIB', '18.00-19.00 WIB',
-//            '20.00-21.00 WIB', '21.00-22.00 WIB', '22.00-23.00 WIB'
-//        ];
-//        // Get all bookings
-//        $bookings = Booking::all();
-//
-//        // Generate a list of booked slots
-//        $bookedSlots = [];
-//        foreach ($bookings as $booking) {
-//            $bookedSlots[$booking->id_lapangan][$booking->waktu_booking][] = $booking->jam_booking;
-//        }
-//
-//        return view('backend.content.booking.tambah', compact(/*'pelanggans',*/ 'Id_pel', 'lapangans', 'jamBooking', 'bookedSlots'));
-//    }
+    //    public function tambah()
+    //    {
+    ////        $pelanggans = Pelanggan::all();
+    //        $lapangans = Lapangan::all();
+    //        $Id_pel = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
+    //        $jamBooking = [
+    //            '07.00-08.00 WIB', '08.00-09.00 WIB', '09.00-10.00 WIB', '10.00-11.00 WIB',
+    //            '11.00-12.00 WIB', '12.00-13.00 WIB', '13.00-14.00 WIB', '14.00-15.00 WIB',
+    //            '15.00-16.00 WIB', '16.00-17.00 WIB', '17.00-18.00 WIB', '18.00-19.00 WIB',
+    //            '20.00-21.00 WIB', '21.00-22.00 WIB', '22.00-23.00 WIB'
+    //        ];
+    //        // Get all bookings
+    //        $bookings = Booking::all();
+    //
+    //        // Generate a list of booked slots
+    //        $bookedSlots = [];
+    //        foreach ($bookings as $booking) {
+    //            $bookedSlots[$booking->id_lapangan][$booking->waktu_booking][] = $booking->jam_booking;
+    //        }
+    //
+    //        return view('backend.content.booking.tambah', compact(/*'pelanggans',*/ 'Id_pel', 'lapangans', 'jamBooking', 'bookedSlots'));
+    //    }
 
 
 
@@ -211,21 +212,19 @@ class BookingController extends Controller
     }
 
 
-    public function approve(Request $request, $id)
+    public function approve(Request $request, $idbs)
     {
+        $bookingSession = BookingSession::find($idbs);
+        if ($bookingSession->status == 1 && $bookingSession->status_bayar == 0) {
+            $bookingSession->status_bayar = 1;
+            $bookingSession->save();
 
-        if (!session()->has('approved_booking_ids')) {
-
-            session()->put('approved_booking_ids', []);
+            return redirect()->back()->with('pesan', ['success', 'Booking berhasil diapprove.']);
+        } else {
+            return redirect()->back()->with('pesan', ['danger', 'Booking tidak bisa diapprove.']);
         }
-
-
-        $approvedBookingIds = session()->get('approved_booking_ids');
-        $approvedBookingIds[] = $id;
-        session()->put('approved_booking_ids', $approvedBookingIds);
-
-        return redirect(route('booking.list'))->with('pesan', ['success', 'Pesanan telah disetujui']);
     }
+
 
     public function hapus($id)
     {

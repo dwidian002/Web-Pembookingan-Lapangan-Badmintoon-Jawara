@@ -14,7 +14,7 @@ class BookingSession extends Model {
 
     protected $primaryKey = "id";
 
-    protected $fillable = ["date", "id_lap","id_customer","id_session","status"];
+    protected $fillable = ["date", "id_lap","id_customer","id_session","status","status_bayar"];
 
     public function session(): BelongsTo
     {

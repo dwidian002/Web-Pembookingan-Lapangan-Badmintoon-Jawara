@@ -96,9 +96,8 @@ Route::group(['middleware' => 'auth:user'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('role.admin');
         Route::get('/api/check-availability', [BookingController::class, 'checkBookingAvailability']);
+        Route::post('/booking/approve/{idbs}', [BookingController::class, 'approve'])->name('booking.approve');
         // Route::get('/api/check-availability', [BookingController::class, 'checkAvailability']);
-
-        Route::post('/booking/approve/{id}', [BookingController::class, 'approve'])->name('booking.approve');
 
         Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
         Route::get('/menu/tambah', [MenuController::class, 'tambah'])->name('menu.tambah');

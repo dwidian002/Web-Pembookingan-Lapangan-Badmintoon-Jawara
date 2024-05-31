@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('id_customer')->nullable();
             $table->integer('id_session');
             $table->boolean('status');
+            $table->boolean('status_bayar')->default(0);
             $table->timestamps();
         });
     }

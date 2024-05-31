@@ -33,6 +33,8 @@ Route::get('/', [FrontendController::class, 'index']);
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
     Route::post('/login', [AuthController::class, 'Verify'])->name('auth.verify');
+    Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('/prosesRegister', [AuthController::class, 'prosesRegister'])->name('auth.prosesRegister');
 });
 
 Route::middleware(['auth:user', 'role:admin,pelanggan'])->group(function () {

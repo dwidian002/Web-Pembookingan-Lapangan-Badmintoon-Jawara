@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -27,21 +28,24 @@ class AuthController extends Controller
             'password' => 'required|string|min:6'
         ]);
 
-        // Buat data pengguna
+        // Buat data pengguna dengan peran default 'pelanggan'
         $user = User::create([
             'name' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'pelanggan',
+            'email_verified_at' => Carbon::now() // Set role default to 'pelanggan'
         ]);
 
         Auth::login($user);
 
-        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended(route('dashboard.index'));
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect()->intended(route('auth.index'));
         } else {
             return redirect(route('auth.register'))->with('pesan', 'Gagal Mendaftarkan Akun. Silahkan Coba Lagi');
         }
     }
+
 
     public function verify(Request $request)
     {

@@ -68,20 +68,22 @@ class BookingController extends Controller
     }
 
     public function prosestambahbook(Request $request)
-    {
-        $id_customer = $request->id_customer;
-        $date = $request->date;
-        $idbs = $request->idbs;
+{
+    $id_customer = $request->id_customer;
+    $date = $request->date;
+    $idbs = $request->idbs;
 
-        foreach ($idbs as $row) {
-            $bs = BookingSession::findOrFail($row);
-            $bs->id_customer = $id_customer;
-            $bs->status = 1;
-            $bs->save();
-        }
-
-        return redirect()->route('booking.detail', $date)->with('pesan', ['success', 'Berhasil menambah data booking']);
+    foreach ($idbs as $row) {
+        $bs = BookingSession::findOrFail($row);
+        $bs->id_customer = $id_customer;
+        $bs->status = 1;
+        $bs->save();
     }
+
+    return redirect()->route('booking.detail', ['tgl' => $date])->with('pesan', 'Berhasil menambah data booking');
+}
+
+
 
     public function batalkan($idbs)
     {
